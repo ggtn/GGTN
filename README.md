@@ -26,4 +26,4 @@ Model training
 
 7. For parameter configuration of circgggnn model, see circggnn master/configurations json.
 
-8. run the "python3 main.py -p" command to start model training, cut the samples in the ratio of 0.8:0.1:0.1, and use them for training, verification and testing respectively, and finally output the model test results; Run the "python3 main.py -ps" command to introduce the early stop mechanism to prevent over fitting.
+8. run the "python3 main.py -p" command to start model training, cut the samples in the ratio of 0.8:0.1:0.1, and use them for training, verification and testing respectively, and finally output the model test results. Run the "python3 main.py -ps" command to introduce the early stop mechanism to prevent over fitting.
