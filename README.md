@@ -22,6 +22,7 @@ Notes: in each step above, pay attention to adjusting the storage path of input 
 In step 5, you can configure the word2vec embedded vector length as required.
   
 Model training
+
 6. copy the generated code tensor feature data set to the circggnn master/dataset folder.
 
 7. For parameter configuration of circgggnn model, see circggnn master/configurations json.
