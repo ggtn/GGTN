@@ -3,7 +3,7 @@ GGTN-master:
 This model is implemented in Python and applied to c/c++ source code vulnerability detection.
 
 Codegrahs-tensor-master:
-Based on the Joern code parser, the AST/CFG/DDG/NCS code graph is extracted, and the code node tokens sequence is converted into a low dimensional embedding vector using word2vec. The code graph tensor is constructed using the adjacency matrix of four code graphs and labeled with sample labels.
+Based on the Joern code parser, the AST/CFG/DFG/NCS code graph is extracted, and the code node tokens sequence is converted into a low dimensional embedding vector using word2vec. The code graph tensor is constructed using the adjacency matrix of four code graphs and labeled with sample labels.
 
 Execution process:
 Code tensor feature extraction
