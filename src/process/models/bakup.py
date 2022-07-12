@@ -9,7 +9,7 @@ import torch.nn.functional as F
 from typing import List, Tuple
 
 
-class Tensor_GGNN_GCN(MessagePassing):
+class GGTN(MessagePassing):
     def __init__(self,
                  num_edge_types,
                  in_features,
@@ -25,7 +25,7 @@ class Tensor_GGNN_GCN(MessagePassing):
                  aggr="mean",
                  device="cpu",
                  output_model="learning"):
-        super(Tensor_GGNN_GCN, self).__init__(aggr=aggr)
+        super(GGTN, self).__init__(aggr=aggr)
         # params set
         self.num_edge_types = num_edge_types
         self.device = device
@@ -55,8 +55,6 @@ class Tensor_GGNN_GCN(MessagePassing):
         self.lin = nn.Linear(out_features*2, out_features)
         self.conv1 = GCNConv(out_features, out_features, add_self_loops=add_self_loops)
 
-        self.varmisuse_output_layer = nn.Linear(out_features* 2 + 1, 1)
-        self.varnaming_output_layer = nn.Linear(out_features, classifier_features)
 
     def forward(self, x, edge_list: List[torch.tensor], slot_id, candidate_ids,
                 candidate_masks, batch_map:torch.Tensor):
@@ -78,45 +76,15 @@ class Tensor_GGNN_GCN(MessagePassing):
 
         ggnn_out = last_node_states # shape: V, D
 
-        # tensor GCN new:
-        assert self.num_edge_types == 4
-        cur_x = torch.cat([ggnn_out,ggnn_out,ggnn_out, ggnn_out], dim=0)  # 4V, D
-        loop_edge_list = self.matrix_loop(edge_list) # 4V, 4V
-        out = self.conv1(cur_x, loop_edge_list) # 4V, D
-        out = out.view( 4, x_embedding.shape[0], out.shape[-1])  # V, 4, D
-        out = torch.sum(out, dim=0)  # V, D
+#        
+#         assert self.num_edge_types == 4
+#         cur_x = torch.cat([ggnn_out,ggnn_out,ggnn_out, ggnn_out], dim=0)  # 4V, D
+#         loop_edge_list = self.matrix_loop(edge_list) # 4V, 4V
+#         out = self.conv1(cur_x, loop_edge_list) # 4V, D
+#         out = out.view( 4, x_embedding.shape[0], out.shape[-1])  # V, 4, D
+#         out = torch.sum(out, dim=0)  # V, D
 
-        # varnaming
-        #return self.varnaming_learning_output(out, slot_id)
-        
-        # varmisuse
-        return self.varmisuse_learning_output(out, slot_id, candidate_ids, candidate_masks)
-        
-
-    def varmisuse_learning_output(self, out, slot_id, candidate_ids, candidate_masks):
-        candidate_embedding = out[candidate_ids]  # shape: g*c, d
-        slot_embedding = out[slot_id]  # shape: g, d
-
-        candidate_embedding_reshape = candidate_embedding.view(-1, self.max_variable_candidates,
-                                                               out.shape[-1])  # shape: g, c, d
-        slot_inner_product = torch.einsum("cd,cvd->cv", slot_embedding, candidate_embedding_reshape)  #shape g, c
-
-        slot_embedding_unsqueeze = torch.unsqueeze(slot_embedding, dim=1)  # shape: g,1,d
-        slot_embedding_repeat = slot_embedding_unsqueeze.repeat(1, self.max_variable_candidates, 1)  # shape: g, c, d
-
-        slot_cand_comb = torch.cat(
-            [candidate_embedding_reshape, slot_embedding_repeat,
-             torch.unsqueeze(slot_inner_product, dim=-1)], dim=2)  #shape: g, c, d*2+1
-        logits = self.varmisuse_output_layer(slot_cand_comb)  # shape: g, c, 1
-        logits = torch.squeeze(logits, dim=-1)  # shape: g, c
-        logits += (1.0 - candidate_masks.view(-1, self.max_variable_candidates)) * -1e7
-
-        return logits
-
-    def varnaming_learning_output(self, out, slot_id):
-        slot_embedding = out[slot_id]  # shape: g, d
-
-        return self.varnaming_output_layer(slot_embedding)  # g, d*2 => g, classifier
+  
 
     def matrix_transfer(self, edge, i, j):
         # edge: [[i],[j]]
