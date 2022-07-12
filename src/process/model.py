@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import math
-from .models.tensor_ggnn_gcn import Tensor_GGNN_GCN
+from .models.ggtn import GGTN
 
 torch.manual_seed(2020)
 
@@ -79,7 +79,7 @@ class Net(nn.Module):
 
     def __init__(self, gated_graph_conv_args, conv_args, emb_size, device):
         super(Net, self).__init__()
-        self.tensor_ggnn_gcn = Tensor_GGNN_GCN(**gated_graph_conv_args).to(device)
+        self.ggtn = ggtn(**gated_graph_conv_args).to(device)
         self.conv = Conv(**conv_args,
                          fc_1_size=gated_graph_conv_args["out_features"] + emb_size,
                          fc_2_size=gated_graph_conv_args["out_features"]).to(device)
@@ -88,7 +88,7 @@ class Net(nn.Module):
     def forward(self, data):
         x, ast_edge_index,cfg_edge_index,ddg_edge_index,ncs_edge_index = data.x, data.ast_edge_index,data.cfg_edge_index,data.ddg_edge_index,data.ncs_edge_index
         edge_list=[ast_edge_index,cfg_edge_index,ddg_edge_index,ncs_edge_index]
-        x = self.tensor_ggnn_gcn(x,edge_list)
+        x = self.ggtn(x,edge_list)
         x = self.conv(x, data.x)
 
         return x
