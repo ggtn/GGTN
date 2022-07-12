@@ -6,7 +6,7 @@ from .step import Step
 from .model import Net
 
 
-class Tensor_GGNN_GCN(Step):
+class GGTN(Step):
     def __init__(self,
                  path: str,
                  device: str,
@@ -18,7 +18,7 @@ class Tensor_GGNN_GCN(Step):
         self.lr = learning_rate
         self.wd = weight_decay
         self.ll = loss_lambda
-        log.log_info('Tensor_GGNN_GCN', f"LR: {self.lr}; WD: {self.wd}; LL: {self.ll};")
+        log.log_info('GGTN', f"LR: {self.lr}; WD: {self.wd}; LL: {self.ll};")
         _model = Net(**model, device=device)
         super().__init__(model=_model,
                          loss_function=lambda o, t: F.binary_cross_entropy(o, t) + F.l1_loss(o, t) * self.ll,
