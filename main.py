@@ -45,11 +45,11 @@ def select(dataset):
 
 def process_task(stopping):
     context = configs.Process()
-    Tensor_GGNN_GCN = configs.Tensor_GGNN_GCN()
+    GGTN = configs.GGTN()
     model_path = PATHS.model + FILES.model
-    model = process.Tensor_GGNN_GCN(path=model_path, device=DEVICE, model=Tensor_GGNN_GCN.model, learning_rate=Tensor_GGNN_GCN.learning_rate,
-                           weight_decay=Tensor_GGNN_GCN.weight_decay,
-                           loss_lambda=Tensor_GGNN_GCN.loss_lambda)
+    model = process.GGTN(path=model_path, device=DEVICE, model=GGTN.model, learning_rate=GGTN.learning_rate,
+                           weight_decay=GGTN.weight_decay,
+                           loss_lambda=GGTN.loss_lambda)
     train = process.Train(model, context.epochs)
 
     dataset=DataFrame(columns=['input','target'])
