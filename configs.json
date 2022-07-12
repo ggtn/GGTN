@@ -1,5 +1,5 @@
 {
-    "Tensor_GGNN_GCN": {
+    "GGTN": {
         "learning_rate" : 5e-5,
         "weight_decay" : 1.3e-6,
         "loss_lambda" : 1.3e-6,
