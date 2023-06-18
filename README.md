@@ -17,6 +17,11 @@ Based on the Joern code parser, the AST/CFG/DFG/NCS code graph is extracted, and
 
 [3] Russell RL, Kim LY, Hamilton LH, and et al. Automated Vulnerability Detection in Source Code Using Deep Representation Learning. In: 17th IEEE International Conference on Machine Learning and Applications, ICMLA 2018, Orlando, FL, USA, December 17-20, 2018. IEEE; 2018. p. 757–762.
 
+[4] Zhou Y, Liu S, Siow JK, Du X, and Liu Y. Devign: Effective Vulnerability Identification by Learning Comprehensive Pro-
+gram Semantics via Graph Neural Networks. In: Advances in Neural Information Processing Systems: Annual Conference
+on Neural Information Processing Systems; 2019. p. 10197–10207.
+
+
 2) We also upload our datasets of source codes and extrected datasets. Note that due to the space limitations, we cannot upload all datasets but most datasets used in our paper. This will drastically change the results of the experiment. 
 
 Google Drive: [https://www.sri.inf.ethz.ch/research/plml](https://drive.google.com/file/d/1vAZrNPkIf0MAX5Q2bZZMqtdAT4TIeELL/view?usp=sharing)
